@@ -1,0 +1,25 @@
+{
+  "extends": "loopback",
+  "parserOptions": {
+    "ecmaVersion": 2017,
+    "env": {
+      "node": true
+    },
+    "ecmaFeatures": {
+      "experimentalObjectRestSpread": true
+    }
+  },
+  "rules": {
+    "comma-dangle": "off",
+    "max-len": "off",
+    "space-before-function-paren": "off",
+    "camelcase": "off",
+    "strict": "off",
+    "object-curly-spacing": "off",
+    "no-undef": 1,
+    "indent": [
+      "error",
+      2
+    ]
+  }
+}

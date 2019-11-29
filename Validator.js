@@ -28,8 +28,10 @@ class Validator {
     }
   }
 
-  static async getFileSize(path) {
-
+  static getFileSizeInBytes(path) {
+    const stats = fs.statSync(path);
+    const fileSizeInBytes = stats.size;
+    return fileSizeInBytes;
   }
 }
 

@@ -28,7 +28,7 @@ module.exports = class Store {
     }
   }
 
-  async addKeyValueData(key, value, ttl) {
+  async create(key, value, ttl) {
     try {
       // 1. Validate key-value pair
       const isValidKey = Validator.isValidKey(key);
@@ -43,7 +43,7 @@ module.exports = class Store {
       }
 
       // 2. Validate ttl
-      const isInteger = typeof ttl === 'number';
+      const isInteger = typeof ttl === 'number' && !String(ttl).includes('.');
       if (!isInteger) {
         const error = new Error('Invalid ttl - Must be seconds in integer format');
         throw error;
@@ -55,21 +55,29 @@ module.exports = class Store {
         throw error;
       }
 
-      // 3. set local state
+      // 4. Validate filesize
+      const fileSizeInBytes = Validator.getFileSizeInBytes(STORE_FILE_PATHNAME);
+      const ONE_GB_IN_BYTES = 1024 * 1000 * 1000;
+      if (fileSizeInBytes >= ONE_GB_IN_BYTES) { // The size of the file storing data must never exceed 1GB
+        const error = new Error('File size exceeded - Delete some keys to proceed');
+        throw error;
+      }
+
+      // 5. set local state
       this.storeData[key] = {
         value,
         ttl: Math.floor(ttl),
         created: moment().unix()
       };
 
-      // 4. update store
+      // 6. update store
       await this.updateFileStore(this.storeData);
     } catch (e) {
       throw e;
     }
   }
 
-  async findKey(key) {
+  async find(key) {
     const foundKey = this.storeData[key];
     if (foundKey) {
       const current = moment().unix();
@@ -85,7 +93,7 @@ module.exports = class Store {
     return 'Key not found';
   }
 
-  async deleteKey(key) {
+  async delete(key) {
     try {
       const foundKey = this.storeData[key];
       if (foundKey) {

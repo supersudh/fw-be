@@ -7,9 +7,22 @@ const Validator = require('./Validator');
 const STORE_FILE_PATHNAME = `${homedir}/__store.json`;
 
 module.exports = class Store {
+  boot() {
+    try {
+      const doesStoreFileExist = fs.existsSync(STORE_FILE_PATHNAME);
+      if (!doesStoreFileExist) {
+        const emptyJsonString = '{}';
+        fs.writeFileSync(STORE_FILE_PATHNAME, emptyJsonString);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   // Initialize the storeData by reading from store file
   initialize() {
     try {
+      this.boot();
       this.storeData = {};
       return new Promise((resolve, reject) => {
         const stream = fs.createReadStream(STORE_FILE_PATHNAME, { encoding: 'utf-8' });

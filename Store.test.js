@@ -1,7 +1,6 @@
 const fs = require('fs');
 const homedir = require('os').homedir();
 
-const Boot = require('./Boot');
 const Store = require('./Store');
 
 const STORE_FILE_PATHNAME = `${homedir}/__store.json`;
@@ -16,7 +15,6 @@ const removeFile = path => new Promise((resolve, reject) => {
 
 beforeAll(async done => {
   await removeFile(STORE_FILE_PATHNAME);
-  Boot.run();
   await storeInstance.initialize();
   done();
 });

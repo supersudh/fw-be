@@ -17,7 +17,9 @@
   },
   "homepage": "https://github.com/supersudh/fw-be#readme",
   "dependencies": {
-    "inquirer": "^7.0.0"
+    "inquirer": "^7.0.0",
+    "moment": "^2.24.0",
+    "prettyjson": "^1.2.1"
   },
   "devDependencies": {
     "eslint-config-loopback": "^13.1.0"
